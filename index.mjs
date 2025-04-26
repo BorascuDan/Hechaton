@@ -16,6 +16,7 @@ app.use('/api/', apiRouter)
 app.get('/health', async (req, res) => {
   let dbConnection;
   try {
+    console.log('florea');
     await db.raw('SELECT 1+1 AS result');
     dbConnection = "OK";
   } catch (error) {

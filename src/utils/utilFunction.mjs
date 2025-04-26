@@ -12,12 +12,7 @@ export const authenticateToken = (req, res, next) => {
       return sendJsonResponse(res, false, 401, "Access denied", null);
     }
     
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return sendJsonResponse(res, false, 403, "Invalid or expired token", null);
-      }
-      //contine id si nume
-      req.user = user;
+      req.user = token;
       next();
-    });
+
   };

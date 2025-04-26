@@ -55,15 +55,18 @@ export const loginUser = async (req, res) => {
         return sendJsonResponse(res, false, 401, "Invalid credentials", null);
       }
   
-      const token = jwt.sign(
-        { id: user.id, email: user.email, name: user.name},
-        process.env.JWT_SECRET,
-        { expiresIn: "4h" }
-      );
+      // const token = jwt.sign(
+      //   { id: user.id, email: user.email, name: user.name},
+      //   process.env.JWT_SECRET,
+      //   { expiresIn: "4h" }
+      // );
+
+      const token = user.id;
   
       res.setHeader('Authorization', `Bearer ${token}`);
 
-   
+      console.log(token);
+      
     sendJsonResponse(res, true, 200, "Login successful", {
         user: {
             id: user.id,
@@ -91,3 +94,20 @@ export const deleteUser = async (req, res) => {
         sendJsonResponse(res, false, 500, "Server error", null);
       }
 };
+
+export const getDetails = async (req, res) => {
+  try {
+    const id = req.user.id
+
+    let data = await db ('users')
+        .where({id:id})
+        .select('*');
+
+    sendJsonResponse(res, true, 200, 'user data', data);
+} catch (error) {
+    console.error("get error:", error);
+    sendJsonResponse(res, false, 500, "Server error", null);
+  }
+
+
+}
