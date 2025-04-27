@@ -72,3 +72,46 @@ export const temperatura = async (req, res) => {
         sendJsonResponse(res, false, 500, "Server error", null);
     }
 }
+
+function median(values) {
+    if (!values.length) return null;
+    const sorted = [...values].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+  
+    if (sorted.length % 2 === 0) {
+      return (sorted[mid - 1] + sorted[mid]) / 2;
+    } else {
+      return sorted[mid];
+    }
+  }
+
+export const sperow = async (req, res) => {
+    try {
+        const id = req.user;
+
+        const temp = await db('senzors')
+  .where({ user_id: id, senzor_id: 11 })
+  .orderBy('id', 'desc')
+  .limit(10)
+  .select('value');
+
+const zgomot = await db('senzors')
+  .where({ user_id: id, senzor_id: 4 })
+  .orderBy('id', 'desc')
+  .limit(10)
+  .select('value');
+
+const tempValues = temp.map(r => r.value);
+const zgomotValues = zgomot.map(r => r.value);
+
+const response = {
+  temperature: median(tempValues),
+  noise: median(zgomotValues)
+};
+
+        sendJsonResponse(res, true, 200, "Sensor data saved successfully", response);
+    } catch (error) {
+        console.error("get tempreture failed:", error);
+        sendJsonResponse(res, false, 500, "Server error", null);
+    }
+}
