@@ -3,7 +3,7 @@ import { sendJsonResponse } from "../utilFunction.mjs";
 
 export const personalDetails = async (req, res) => {
     try {
-        const id = req.user.id;
+        const id = req.user;
         const {age, weight, height, gender} = req.body;
 
         let complition = false;

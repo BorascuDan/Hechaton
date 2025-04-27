@@ -82,7 +82,7 @@ export const loginUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try {
-        const id = req.user.id
+      const id = req.user;
 
         await db ('users')
             .where({id:id})
@@ -97,13 +97,14 @@ export const deleteUser = async (req, res) => {
 
 export const getDetails = async (req, res) => {
   try {
-    const id = req.user.id
+    const id = req.user;
 
     let data = await db ('users')
         .where({id:id})
-        .select('*');
+        .select('username')
+        .first();
 
-    sendJsonResponse(res, true, 200, 'user data', data);
+    sendJsonResponse(res, true, 200, 'user data', data.username);
 } catch (error) {
     console.error("get error:", error);
     sendJsonResponse(res, false, 500, "Server error", null);
