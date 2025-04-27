@@ -5,6 +5,7 @@ export const bautura = async (req, res) => {
     try {
         const id = req.user;
         const { location } = (req.body);
+        console.log(id, location)
         // Validate that location is either 0 or 1
         if (location !== '0' && location !== '1') {
             return sendJsonResponse(res, false, 400, "Invalid location parameter. Must be 0 or 1.", null);
@@ -54,6 +55,8 @@ export const getTotalSips = async (req, res) => {
             .where({user_id: id, location: 1})
             .select('sips')
             .first();
+
+        
             
         const totalSips =  location0Result.sips + location1Result.sips;
         
